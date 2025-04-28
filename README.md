@@ -67,42 +67,42 @@ This will start the app on `http://localhost:5173`.
 
 ## 🔎 Code Snippets
 
-### usePokemons.tsx – Fetch & Cache Pokémon List
+📦 API Integration Example
 
+This application fetches Pokémon data from the PokéAPI using React's useEffect and useState hooks.
 ```
-const cachedData = localStorage.getItem('pokemon-cache-1000');
-if (cachedData && !isExpired(cachedData)) {
-  setPokemons(JSON.parse(cachedData));
-  setLoading(false);
-  return;
+import React, { useEffect, useState } from 'react';
+
+function PokemonList() {
+  const [pokemons, setPokemons] = useState([]);
+
+  useEffect(() => {
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=20')
+      .then(response => response.json())
+      .then(data => setPokemons(data.results))
+      .catch(error => console.error('Error fetching Pokémon data:', error));
+  }, []);
+
+  return (
+    <ul>
+      {pokemons.map(pokemon => (
+        <li key={pokemon.name}>{pokemon.name}</li>
+      ))}
+    </ul>
+  );
 }
 
-const response = await fetch(`${API_BASE_URL}/pokemon?limit=1000`);
-const data = await response.json();
+export default PokemonList;
 ```
 
-### getTypeBadgeColor.ts – Assign Tailwind Class by Type
+Explanation:
 
-```
-const typeColors: { [key: string]: string } = {
-  fire: 'bg-red-500',
-  water: 'bg-blue-500',
-  grass: 'bg-green-500',
-  electric: 'bg-yellow-500',
-  ...
-};
+    useState initializes the pokemons state to store the fetched data.
 
-return typeColors[type] || 'bg-gray-500';
-```
+    useEffect triggers the data fetch when the component mounts.
 
-### home.tsx – Sorting & Filtering Logic
+    The fetched data is set to the pokemons state.
 
-```
-const filtered = pokemons.filter((p) =>
-  p.name.toLowerCase().includes(searchTerm.toLowerCase())
-);
-
-const sorted = sortPokemons(filtered, sortKey);
-```
-
+    The component renders a list of Pokémon names.
+    
 ---
